@@ -18,16 +18,16 @@ public class PessoaService {
 			pessoaRepository.cadastrar(novaPessoa);			
 		}
 		
-		if(novaPessoa.getNome() == null) {
+		if(novaPessoa.getNome() == null || novaPessoa.getNome().isEmpty()) {
 			throw new ControleVacinasException("Campo nome não pode ficar vazio.");
 		}
 		if(novaPessoa.getDataNascimento() == null) {
 			throw new ControleVacinasException("Campo data de nascimento não pode ficar vazio.");
 		}
-		if(novaPessoa.getSexo() == null) {
+		if(novaPessoa.getSexo() == null || novaPessoa.getNome().isEmpty()) {
 			throw new ControleVacinasException("Campo sexo não pode ficar vazio.");
 		}
-		if(novaPessoa.getCpf() == null) {
+		if(novaPessoa.getCpf() == null || novaPessoa.getNome().isEmpty()) {
 			throw new ControleVacinasException("Campo cpf não pode ficar vazio.");
 		}
 		if(novaPessoa.getTipo() == null) {
@@ -38,6 +38,10 @@ public class PessoaService {
 	
 	public ArrayList<Pessoa> consultarTodas(){
 		return pessoaRepository.consultarTodas();		
+	}
+	
+	public Pessoa buscar(int id ) {
+		return pessoaRepository.buscar(id);
 	}
 	
 	public boolean excluir(int id) {

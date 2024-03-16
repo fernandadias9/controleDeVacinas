@@ -1,6 +1,7 @@
 package model.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import model.entity.enums.TipoDeReceptor;
 
@@ -12,6 +13,7 @@ public class Pessoa {
 	private String sexo;
 	private String cpf;
 	private TipoDeReceptor tipo;
+	private ArrayList<Vacinacao> vacinacoes;
 	
 	public Pessoa() {
 		super();
@@ -39,8 +41,8 @@ public class Pessoa {
 		return nome;
 	}
 
-	public void setNome(String name) {
-		this.nome = name;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public LocalDate getDataNascimento() {
@@ -73,5 +75,13 @@ public class Pessoa {
 
 	public void setTipo(TipoDeReceptor tipo) {
 		this.tipo = tipo;
-	}	
+	}
+
+	public ArrayList<Vacinacao> getVacinacoes() {
+		return vacinacoes;
+	}
+
+	public void setVacinacoes(ArrayList<Vacinacao> vacinacoes) {
+		this.vacinacoes = vacinacoes;
+	}
 }

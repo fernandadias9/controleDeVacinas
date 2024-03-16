@@ -28,9 +28,16 @@ public class PessoaController {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/consultartodas")
+	@Path("/listartodas")
 	public ArrayList<Pessoa> consultarTodas(){
 		 return pessoaService.consultarTodas();
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/buscar/{id}")
+	public Pessoa buscar(@PathParam("id") int id){
+		 return pessoaService.buscar(id);
 	}
 	
 	@DELETE
