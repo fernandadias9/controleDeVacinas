@@ -33,7 +33,7 @@ public class VacinacaoRepository {
 	public void preencherParametrosParaInsertOuUpdate(PreparedStatement pstmt, Vacinacao novaVacinacao) throws SQLException {
 		pstmt.setInt(1,novaVacinacao.getIdPessoa());
 		pstmt.setObject(2,novaVacinacao.getData());
-		pstmt.setInt(1,novaVacinacao.getAvaliacao());
-		pstmt.setInt(1,novaVacinacao.getVacina().getId());
+		pstmt.setInt(3,novaVacinacao.getAvaliacao());
+		pstmt.setInt(4,novaVacinacao.getVacina().getId());
 	}
 }
