@@ -30,6 +30,26 @@ public class VacinacaoRepository {
 		return novaVacinacao;
 	}
 	
+	public Boolean atualizar(Vacinacao vacinacao) {
+		boolean retorno = false;
+		String query = "UPDATE vacinacao SET idPessoa=?, data=?, avaliacao=?, idVacina=? WHERE id=?";
+		Connection conn = Banco.getConnection();
+		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
+		
+		try {
+			preencherParametrosParaInsertOuUpdate(pstmt, vacinacao);
+			pstmt.setInt(5, vacinacao.getId());
+			retorno = pstmt.executeUpdate() > 0;
+		} catch(SQLException erro) {
+			System.out.println("Erro ao atualizar vacinação.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closePreparedStatement(pstmt);
+			Banco.closeConnection(conn);
+		}		
+		return retorno;
+	}
+	
 	public void preencherParametrosParaInsertOuUpdate(PreparedStatement pstmt, Vacinacao novaVacinacao) throws SQLException {
 		pstmt.setInt(1,novaVacinacao.getIdPessoa());
 		pstmt.setObject(2,novaVacinacao.getData());

@@ -10,4 +10,8 @@ public class VacinacaoService {
 	public Vacinacao cadastrar(Vacinacao novaVacinacao) {
 		return vacinacao.cadastrar(novaVacinacao);
 	}
+	
+	public Boolean atualizar(Vacinacao novaVacinacao) {
+		return vacinacao.atualizar(novaVacinacao);
+	}
 }

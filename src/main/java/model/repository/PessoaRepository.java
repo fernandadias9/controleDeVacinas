@@ -1,7 +1,6 @@
 package model.repository;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,6 +35,27 @@ public class PessoaRepository {
 		return novaPessoa;
 	}
 	
+	public Boolean atualizar(Pessoa pessoa) {
+		boolean retorno = false;
+		String query = "UPDATE pessoa SET nome=?, dataNascimento=?, sexo=?, cpf=?, id_tipo=? WHERE id=?";
+		Connection conn = Banco.getConnection();
+		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
+		
+		try {
+					 
+			preencherParametrosParaInsertOuUpdate(pstmt, pessoa);
+			pstmt.setInt(6, pessoa.getId());
+			retorno = pstmt.executeUpdate() > 0;
+		} catch(SQLException erro) {
+			System.out.println("Não foi possível atualizar pessoa.");
+			System.out.println("Erro " + erro.getMessage());
+		} finally {
+			Banco.closePreparedStatement(pstmt);
+			Banco.closeConnection(conn);
+		}
+		return retorno;
+	}
+	
 	public ArrayList<Pessoa> consultarTodas() {
 		ArrayList<Pessoa> listaPessoas = new ArrayList<>();
 		Connection conn = Banco.getConnection();
@@ -49,20 +69,7 @@ public class PessoaRepository {
 			while(resultado.next()){
 				Pessoa pessoa = new Pessoa();
 				
-				pessoa.setId(Integer.parseInt(resultado.getString("id")));
-				pessoa.setNome(resultado.getString("nome"));
-				pessoa.setDataNascimento(resultado.getDate("dataNascimento").toLocalDate()); 
-				pessoa.setSexo(resultado.getString("sexo"));
-				pessoa.setCpf(resultado.getString("cpf"));
-				if(resultado.getInt("id_tipo") == 1) {
-					pessoa.setTipo(TipoDeReceptor.PESQUISADOR);
-				}
-				if(resultado.getInt("id_tipo") == 2) {
-					pessoa.setTipo(TipoDeReceptor.VOLUNTARIO);
-				}
-				if(resultado.getInt("id_tipo") == 3) {
-					pessoa.setTipo(TipoDeReceptor.PUBLICO_GERAL);
-				}				
+				preencherParametrosParaListarOuBuscar(resultado, pessoa);				
 				listaPessoas.add(pessoa);
 			}
 		} catch (SQLException erro){
@@ -88,20 +95,7 @@ public class PessoaRepository {
 			resultado = stmt.executeQuery(query);
 			
 			if(resultado.next()) {
-				pessoa.setId(Integer.parseInt(resultado.getString("id")));
-				pessoa.setNome(resultado.getString("nome"));
-				pessoa.setDataNascimento(resultado.getDate("dataNascimento").toLocalDate()); 
-				pessoa.setSexo(resultado.getString("sexo"));
-				pessoa.setCpf(resultado.getString("cpf"));
-				if(resultado.getInt("id_tipo") == 1) {
-					pessoa.setTipo(TipoDeReceptor.PESQUISADOR);
-				}
-				if(resultado.getInt("id_tipo") == 2) {
-					pessoa.setTipo(TipoDeReceptor.VOLUNTARIO);
-				}
-				if(resultado.getInt("id_tipo") == 3) {
-					pessoa.setTipo(TipoDeReceptor.PUBLICO_GERAL);
-				}				
+				preencherParametrosParaListarOuBuscar(resultado, pessoa);		
 			}
 						
 		} catch (SQLException erro){
@@ -151,6 +145,25 @@ public class PessoaRepository {
 		
 		if(novaPessoa.getTipo().equals(TipoDeReceptor.PUBLICO_GERAL)) {
 			pstmt.setInt(5, 3);
+		}
+	}
+	
+	private void preencherParametrosParaListarOuBuscar(ResultSet resultado
+			, Pessoa pessoa) throws SQLException {
+		
+		pessoa.setId(Integer.parseInt(resultado.getString("id")));
+		pessoa.setNome(resultado.getString("nome"));
+		pessoa.setDataNascimento(resultado.getDate("dataNascimento").toLocalDate()); 
+		pessoa.setSexo(resultado.getString("sexo"));
+		pessoa.setCpf(resultado.getString("cpf"));
+		if(resultado.getInt("id_tipo") == 1) {
+			pessoa.setTipo(TipoDeReceptor.PESQUISADOR);
+		}
+		if(resultado.getInt("id_tipo") == 2) {
+			pessoa.setTipo(TipoDeReceptor.VOLUNTARIO);
+		}
+		if(resultado.getInt("id_tipo") == 3) {
+			pessoa.setTipo(TipoDeReceptor.PUBLICO_GERAL);
 		}
 	}
 	
