@@ -33,7 +33,7 @@ public class VacinaService {
 		return vacinaRepository.buscar(id);
 	}
 	
-	public Boolean excuir(int id) {
+	public Boolean excluir(int id) {
 		return vacinaRepository.excluir(id);
 	}
 }

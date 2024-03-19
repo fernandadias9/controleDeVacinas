@@ -53,6 +53,6 @@ public class VacinaController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/excluir/{ id }")
 	public Boolean excluir(@PathParam("id") int id) {
-		return vacinaService.excuir(id);
+		return vacinaService.excluir(id);
 	}
 }

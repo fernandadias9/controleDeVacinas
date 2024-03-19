@@ -3,6 +3,7 @@ package controller;
 import java.util.ArrayList;
 
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -45,5 +46,19 @@ public class VacinacaoController {
 	@Path("/buscar/{ id }")
 	public Vacinacao buscar(@PathParam("id") int id){
 		return vacinacaoService.buscar(id);
+	}
+	
+	@DELETE
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/excluir/{ id }")
+	public Boolean excluir(@PathParam("id") int id) {
+		return vacinacaoService.excluir(id);
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/buscarporpessoa/{ idPessoa }")
+	public ArrayList<Vacinacao> buscarVacinacoesPorPessoa(@PathParam("idPessoa") int idPessoa ){
+		return vacinacaoService.buscarVacinacoesPorPessoa(idPessoa);
 	}
 }

@@ -100,6 +100,48 @@ public class VacinacaoRepository {
 		return vacinacao;
 	}
 	
+	public Boolean excluir(int id) {
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		boolean excluiu = false;
+		String query = "DELETE FROM vacinacao WHERE id = " + id;
+		
+		try {
+			excluiu = stmt.executeUpdate(query) > 0;
+		} catch(SQLException erro) {
+			System.out.println("Não foi possível excluir o registrode vacinação.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return excluiu;
+	}
+	
+	public ArrayList<Vacinacao> buscarVacinacoesPorPessoa(int idPessoa){
+		ArrayList<Vacinacao> listaVacinacoes = new ArrayList<Vacinacao>();
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		String query = "SELECT * FROM vacinacao WHERE idPessoa = " + idPessoa;
+		
+		try {
+			ResultSet resultado = stmt.executeQuery(query);
+			
+			while(resultado.next()) {
+				Vacinacao vacinacao = new Vacinacao();
+				preencherParametrosParaListarTodasOuBuscar(resultado, vacinacao);
+				listaVacinacoes.add(vacinacao);
+			}
+		} catch (SQLException erro) {
+			System.out.println("Não foi possível listar as vacinações.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return listaVacinacoes;
+	}
+	
 	public void preencherParametrosParaInsertOuUpdate(PreparedStatement pstmt, Vacinacao novaVacinacao) throws SQLException {
 		pstmt.setInt(1,novaVacinacao.getIdPessoa());
 		pstmt.setObject(2,novaVacinacao.getData());

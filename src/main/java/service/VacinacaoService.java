@@ -24,4 +24,12 @@ public class VacinacaoService {
 	public Vacinacao buscar(int id) {
 		return vacinacaoRepository.buscar(id);
 	}
+	
+	public Boolean excluir(int id) {
+		return vacinacaoRepository.excluir(id);
+	}
+	
+	public ArrayList<Vacinacao> buscarVacinacoesPorPessoa(int idPessoa){
+		return vacinacaoRepository.buscarVacinacoesPorPessoa(idPessoa);
+	}
 }
