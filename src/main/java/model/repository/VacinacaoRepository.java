@@ -4,7 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import model.entity.Vacina;
 import model.entity.Vacinacao;
+import service.VacinaService;
 
 public class VacinacaoRepository {
 
@@ -50,10 +55,44 @@ public class VacinacaoRepository {
 		return retorno;
 	}
 	
+	public ArrayList<Vacinacao> listarTodas(){
+		ArrayList<Vacinacao> listaVacinacoes = new ArrayList<Vacinacao>();
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		String query = "SELECT * FROM vacinacao";
+		
+		try {
+			ResultSet resultado = stmt.executeQuery(query);
+			
+			while(resultado.next()) {
+				Vacinacao vacinacao = new Vacinacao();
+				preencherParametrosParaListarTodasOuBuscar(resultado, vacinacao);
+				listaVacinacoes.add(vacinacao);
+			}
+		} catch (SQLException erro) {
+			System.out.println("Não foi possível listar as vacinações.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return listaVacinacoes;
+	}
+	
 	public void preencherParametrosParaInsertOuUpdate(PreparedStatement pstmt, Vacinacao novaVacinacao) throws SQLException {
 		pstmt.setInt(1,novaVacinacao.getIdPessoa());
 		pstmt.setObject(2,novaVacinacao.getData());
 		pstmt.setInt(3,novaVacinacao.getAvaliacao());
 		pstmt.setInt(4,novaVacinacao.getVacina().getId());
+	}
+	
+	public void preencherParametrosParaListarTodasOuBuscar(ResultSet resultado, Vacinacao vacinacao) throws SQLException {
+		VacinaService vacina = new VacinaService();
+		
+		vacinacao.setId(resultado.getInt("id"));
+		vacinacao.setIdPessoa(resultado.getInt("idPessoa"));
+		vacinacao.setVacina(vacina.buscar(resultado.getInt("idVacina")));
+		vacinacao.setData(resultado.getDate("data").toLocalDate());
+		vacinacao.setAvaliacao(resultado.getInt("avaliacao"));
 	}
 }

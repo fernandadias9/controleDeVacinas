@@ -1,6 +1,9 @@
 package controller;
 
+import java.util.ArrayList;
+
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -12,13 +15,13 @@ import service.VacinacaoService;
 @Path("/vacinacao")
 public class VacinacaoController {
 	
-	VacinacaoService vacinacao = new VacinacaoService();
+	VacinacaoService vacinacaoService = new VacinacaoService();
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Vacinacao cadastrar(Vacinacao novaVacinacao) {
-		return vacinacao.cadastrar(novaVacinacao);
+		return vacinacaoService.cadastrar(novaVacinacao);
 	}
 	
 	@PUT
@@ -26,6 +29,13 @@ public class VacinacaoController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/atualizar")
 	public Boolean atualizar(Vacinacao novaVacinacao) {
-		return vacinacao.atualizar(novaVacinacao);
-	}	
+		return vacinacaoService.atualizar(novaVacinacao);
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/listartodas")
+	public ArrayList<Vacinacao> listarTodas(){
+		return vacinacaoService.listarTodas();
+	}
 }

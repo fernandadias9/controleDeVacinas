@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import model.entity.Vacina;
 import model.entity.enums.Estagio;
+import service.PessoaService;
 
 public class VacinaRepository {
 
@@ -144,7 +145,7 @@ public class VacinaRepository {
 	}
 	
 	public void preencherParametrosParaBuscarOuListarTodas(ResultSet resultado, Vacina vacina) throws SQLException {
-		PessoaRepository pesquisador = new PessoaRepository();
+		PessoaService pesquisador = new PessoaService();
 		
 		vacina.setId(resultado.getInt("id"));
 		vacina.setNome(resultado.getString("nome"));
