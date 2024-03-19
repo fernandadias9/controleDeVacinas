@@ -1,5 +1,3 @@
-// verificar pesquisador responsável no método listar todas
-
 package model.repository;
 
 import java.sql.Connection;
@@ -58,8 +56,7 @@ public class VacinaRepository {
 		return resultado;
 	}
 	
-	public ArrayList<Vacina> listarTodas() {
-		PessoaRepository pesquisador = new PessoaRepository();
+	public ArrayList<Vacina> listarTodas() {		
 		ArrayList<Vacina> listaVacinas = new ArrayList<>();
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
@@ -70,21 +67,7 @@ public class VacinaRepository {
 			resultado = stmt.executeQuery(query);
 			while(resultado.next()) {
 				Vacina vacina = new Vacina();
-				
-				vacina.setId(resultado.getInt("id"));
-				vacina.setNome(resultado.getString("nome"));
-				vacina.setPaisOrigem(resultado.getString("paisOrigem"));
-				vacina.setPesquisadorResponsavel(pesquisador.buscar(resultado.getInt("idPesquisador")));
-				if(resultado.getInt("idEstagio") == 1) {
-					vacina.setEstagio(Estagio.INICIAL);
-				}
-				if(resultado.getInt("idEstagio") == 2) {
-					vacina.setEstagio(Estagio.TESTES);
-				}
-				if(resultado.getInt("idEstagio") == 3) {
-					vacina.setEstagio(Estagio.APLICACAO);
-				}		
-				vacina.setDataInicio(resultado.getDate("dataInicio").toLocalDate());
+				preencherParametrosParaBuscarOuListarTodas(resultado, vacina);				
 				listaVacinas.add(vacina);
 			}
 		} catch(SQLException erro) {
@@ -97,6 +80,29 @@ public class VacinaRepository {
 		}
 		
 		return listaVacinas;
+	}
+	
+	public Vacina buscar(int id) {
+		Vacina vacina = new Vacina();
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+		String query = "SELECT * FROM vacina WHERE id = " + id;
+		
+		try {
+			resultado = stmt.executeQuery(query);
+			if(resultado.next()) {
+				preencherParametrosParaBuscarOuListarTodas(resultado, vacina);
+			}
+		} catch(SQLException erro) {
+			System.out.println("Erro ao buscar vacina.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return vacina;
 	}
 	
 	private void preencherParametrosParaInsertOuUpdate(PreparedStatement pstmt
@@ -117,5 +123,24 @@ public class VacinaRepository {
 			pstmt.setInt(4, 3);
 		}
 		pstmt.setObject(5, novaVacina.getDataInicio());
+	}
+	
+	public void preencherParametrosParaBuscarOuListarTodas(ResultSet resultado, Vacina vacina) throws SQLException {
+		PessoaRepository pesquisador = new PessoaRepository();
+		
+		vacina.setId(resultado.getInt("id"));
+		vacina.setNome(resultado.getString("nome"));
+		vacina.setPaisOrigem(resultado.getString("paisOrigem"));
+		vacina.setPesquisadorResponsavel(pesquisador.buscar(resultado.getInt("idPesquisador")));
+		if(resultado.getInt("idEstagio") == 1) {
+			vacina.setEstagio(Estagio.INICIAL);
+		}
+		if(resultado.getInt("idEstagio") == 2) {
+			vacina.setEstagio(Estagio.TESTES);
+		}
+		if(resultado.getInt("idEstagio") == 3) {
+			vacina.setEstagio(Estagio.APLICACAO);
+		}		
+		vacina.setDataInicio(resultado.getDate("dataInicio").toLocalDate());
 	}
 }

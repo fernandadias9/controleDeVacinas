@@ -28,4 +28,8 @@ public class VacinaService {
 	public ArrayList<Vacina> listarTodas() {
 		return vacinaRepository.listarTodas();
 	}
+	
+	public Vacina buscar(int id) {
+		return vacinaRepository.buscar(id);
+	}
 }
