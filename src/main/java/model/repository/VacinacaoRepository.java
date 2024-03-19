@@ -6,8 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
-import model.entity.Vacina;
 import model.entity.Vacinacao;
 import service.VacinaService;
 
@@ -77,6 +75,29 @@ public class VacinacaoRepository {
 			Banco.closeConnection(conn);
 		}
 		return listaVacinacoes;
+	}
+	
+	public Vacinacao buscar(int id) {
+		Vacinacao vacinacao = new Vacinacao();
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+		String query = "SELECT * FROM vacinacao WHERE id = " + id;
+		
+		try {
+			resultado = stmt.executeQuery(query);
+			
+			if(resultado.next()) {
+				preencherParametrosParaListarTodasOuBuscar(resultado, vacinacao);
+			}			
+		} catch(SQLException erro) {
+			System.out.println("Erro ao buscar vacinação.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return vacinacao;
 	}
 	
 	public void preencherParametrosParaInsertOuUpdate(PreparedStatement pstmt, Vacinacao novaVacinacao) throws SQLException {

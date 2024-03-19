@@ -7,6 +7,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import model.entity.Vacinacao;
@@ -37,5 +38,12 @@ public class VacinacaoController {
 	@Path("/listartodas")
 	public ArrayList<Vacinacao> listarTodas(){
 		return vacinacaoService.listarTodas();
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/buscar/{ id }")
+	public Vacinacao buscar(@PathParam("id") int id){
+		return vacinacaoService.buscar(id);
 	}
 }
