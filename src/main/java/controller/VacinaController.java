@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import excepition.ControleVacinasException;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -46,5 +47,12 @@ public class VacinaController {
 	@Path("/buscar/{ id }")
 	public Vacina buscar(@PathParam("id") int id) {
 		return vacinaService.buscar(id);
+	}
+	
+	@DELETE
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/excluir/{ id }")
+	public Boolean excluir(@PathParam("id") int id) {
+		return vacinaService.excuir(id);
 	}
 }

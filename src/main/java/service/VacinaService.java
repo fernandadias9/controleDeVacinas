@@ -32,4 +32,8 @@ public class VacinaService {
 	public Vacina buscar(int id) {
 		return vacinaRepository.buscar(id);
 	}
+	
+	public Boolean excuir(int id) {
+		return vacinaRepository.excluir(id);
+	}
 }

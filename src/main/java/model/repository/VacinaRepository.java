@@ -105,6 +105,24 @@ public class VacinaRepository {
 		return vacina;
 	}
 	
+	public Boolean excluir(int id) {
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		boolean excluiu = false;
+		String query = "DELETE FROM vacina WHERE id = " + id;
+		
+		try {
+			excluiu = stmt.executeUpdate(query) > 0;
+		} catch(SQLException erro) {
+			System.out.println("Não foi possível excluir a vacina.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return excluiu;
+	}
+	
 	private void preencherParametrosParaInsertOuUpdate(PreparedStatement pstmt
 			, Vacina novaVacina) throws SQLException {
 		
