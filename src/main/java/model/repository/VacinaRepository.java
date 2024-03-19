@@ -38,6 +38,26 @@ public class VacinaRepository {
 		return novaVacina;
 	}
 	
+	public Boolean atualizar(Vacina vacina) {
+		boolean resultado = false;
+		String query = "UPDATE vacina SET nome=?, paisOrigem=?, idPesquisador=?, idEstagio=?, dataInicio=? WHERE id=?";
+		Connection conn = Banco.getConnection();
+		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
+		
+		try {
+			preencherParametrosParaInsertOuUpdate(pstmt, vacina);
+			pstmt.setInt(6, vacina.getId());
+			resultado = pstmt.executeUpdate() > 0;
+		} catch(SQLException erro) {
+			System.out.println("Não foi possível atualizar vacina.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closePreparedStatement(pstmt);
+			Banco.closeConnection(conn);
+		}
+		return resultado;
+	}
+	
 	public ArrayList<Vacina> listarTodas() {
 		PessoaRepository pesquisador = new PessoaRepository();
 		ArrayList<Vacina> listaVacinas = new ArrayList<>();

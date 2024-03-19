@@ -6,6 +6,7 @@ import excepition.ControleVacinasException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
@@ -15,19 +16,27 @@ import service.VacinaService;
 @Path("/vacina")
 public class VacinaController {
 
-	private VacinaService vacina = new VacinaService();
+	private VacinaService vacinaService = new VacinaService();
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Vacina cadastrar(Vacina novaVacina) throws ControleVacinasException {
-		return vacina.cadastrar(novaVacina);
+		return vacinaService.cadastrar(novaVacina);
+	}
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/atualizar")
+	public Boolean atualizar(Vacina vacina) throws ControleVacinasException {
+		return vacinaService.atualizar(vacina);
 	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/listartodas")
 	public ArrayList<Vacina> listarTodas() {
-		return vacina.listarTodas();
+		return vacinaService.listarTodas();
 	}
 }

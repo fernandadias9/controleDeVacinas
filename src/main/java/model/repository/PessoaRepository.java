@@ -41,8 +41,7 @@ public class PessoaRepository {
 		Connection conn = Banco.getConnection();
 		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
 		
-		try {
-					 
+		try {					 
 			preencherParametrosParaInsertOuUpdate(pstmt, pessoa);
 			pstmt.setInt(6, pessoa.getId());
 			retorno = pstmt.executeUpdate() > 0;

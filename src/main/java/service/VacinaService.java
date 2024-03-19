@@ -9,16 +9,23 @@ import model.repository.VacinaRepository;
 
 public class VacinaService {
 
-	private VacinaRepository vacina = new VacinaRepository();
+	private VacinaRepository vacinaRepository = new VacinaRepository();
 	
 	public Vacina cadastrar(Vacina novaVacina) throws ControleVacinasException{
 		if(novaVacina.getPesquisadorResponsavel().getTipo() != TipoDeReceptor.PESQUISADOR) {
 			throw new ControleVacinasException("Pesquisador responsável inválido. Verifique o tipo de receptor da pessoa cadastrada.");
 		} 
-		return vacina.cadastrar(novaVacina);
+		return vacinaRepository.cadastrar(novaVacina);
+	}
+	
+	public Boolean atualizar(Vacina vacina) throws ControleVacinasException {
+		if(vacina.getPesquisadorResponsavel().getTipo() != TipoDeReceptor.PESQUISADOR) {
+			throw new ControleVacinasException("Pesquisador responsável inválido. Verifique o tipo de receptor da pessoa cadastrada.");
+		} 
+		return vacinaRepository.atualizar(vacina);
 	}
 	
 	public ArrayList<Vacina> listarTodas() {
-		return vacina.listarTodas();
+		return vacinaRepository.listarTodas();
 	}
 }
