@@ -8,13 +8,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import model.entity.Vacina;
 import model.entity.enums.Estagio;
+import service.PaisService;
 import service.PessoaService;
 
 public class VacinaRepository {
 
 	public Vacina cadastrar(Vacina novaVacina) {
 		
-		String query = "INSERT INTO vacina (nome, paisOrigem, idPesquisador, idEstagio, dataInicio) VALUES (?, ?, ?, ?, ?)";
+		String query = "INSERT INTO vacina (nome, idPaisOrigem, idPesquisador, idEstagio, dataInicio) VALUES (?, ?, ?, ?, ?)";
 		Connection conn = Banco.getConnection();
 		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
 		try {
@@ -39,7 +40,7 @@ public class VacinaRepository {
 	
 	public Boolean atualizar(Vacina vacina) {
 		boolean resultado = false;
-		String query = "UPDATE vacina SET nome=?, paisOrigem=?, idPesquisador=?, idEstagio=?, dataInicio=? WHERE id=?";
+		String query = "UPDATE vacina SET nome=?, idPaisOrigem=?, idPesquisador=?, idEstagio=?, dataInicio=? WHERE id=?";
 		Connection conn = Banco.getConnection();
 		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
 		
@@ -128,7 +129,7 @@ public class VacinaRepository {
 			, Vacina novaVacina) throws SQLException {
 		
 		pstmt.setString(1, novaVacina.getNome());
-		pstmt.setString(2, novaVacina.getPaisOrigem());
+		pstmt.setInt(2, novaVacina.getPaisOrigem().getId());
 		pstmt.setInt(3, novaVacina.getPesquisadorResponsavel().getId());
 		if(novaVacina.getEstagio().equals(Estagio.INICIAL)) {
 			pstmt.setInt(4, 1);
@@ -146,10 +147,11 @@ public class VacinaRepository {
 	
 	public void preencherParametrosParaBuscarOuListarTodas(ResultSet resultado, Vacina vacina) throws SQLException {
 		PessoaService pesquisador = new PessoaService();
+		PaisService pais = new PaisService();
 		
 		vacina.setId(resultado.getInt("id"));
 		vacina.setNome(resultado.getString("nome"));
-		vacina.setPaisOrigem(resultado.getString("paisOrigem"));
+		vacina.setPaisOrigem(pais.buscar(resultado.getInt("idPaisOrigem")));
 		vacina.setPesquisadorResponsavel(pesquisador.buscar(resultado.getInt("idPesquisador")));
 		if(resultado.getInt("idEstagio") == 1) {
 			vacina.setEstagio(Estagio.INICIAL);

@@ -13,13 +13,15 @@ public class Pessoa {
 	private String sexo;
 	private String cpf;
 	private TipoDeReceptor tipo;
+	private Pais pais;
 	private ArrayList<Vacinacao> vacinacoes;
 	
 	public Pessoa() {
 		super();
 	}
 
-	public Pessoa(int id, String nome, LocalDate dataNascimento, String sexo, String cpf, TipoDeReceptor tipo) {
+	public Pessoa(int id, String nome, LocalDate dataNascimento, String sexo, String cpf, TipoDeReceptor tipo,
+			Pais pais, ArrayList<Vacinacao> vacinacoes) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -27,6 +29,8 @@ public class Pessoa {
 		this.sexo = sexo;
 		this.cpf = cpf;
 		this.tipo = tipo;
+		this.pais = pais;
+		this.vacinacoes = vacinacoes;
 	}
 
 	public int getId() {
@@ -75,6 +79,14 @@ public class Pessoa {
 
 	public void setTipo(TipoDeReceptor tipo) {
 		this.tipo = tipo;
+	}
+
+	public Pais getPais() {
+		return pais;
+	}
+
+	public void setPais(Pais pais) {
+		this.pais = pais;
 	}
 
 	public ArrayList<Vacinacao> getVacinacoes() {

@@ -6,14 +6,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import model.entity.Pessoa;
 import model.entity.enums.TipoDeReceptor;
+import service.PaisService;
+import service.VacinacaoService;
 
 public class PessoaRepository {
 
 	public Pessoa cadastrar(Pessoa novaPessoa) {
-		String query = "INSERT INTO pessoa (nome, dataNascimento, sexo, cpf, id_tipo) VALUES (?, ?, ?, ?, ?)";
+		String query = "INSERT INTO pessoa (nome, dataNascimento, sexo, cpf, idTipo, idPais) VALUES (?, ?, ?, ?, ?, ?)";
 		Connection conn = Banco.getConnection();
 		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
 		try {
@@ -145,25 +146,30 @@ public class PessoaRepository {
 		if(novaPessoa.getTipo().equals(TipoDeReceptor.PUBLICO_GERAL)) {
 			pstmt.setInt(5, 3);
 		}
+		pstmt.setInt(6, novaPessoa.getPais().getId());
 	}
 	
 	private void preencherParametrosParaListarOuBuscar(ResultSet resultado
 			, Pessoa pessoa) throws SQLException {
+//		VacinacaoService vacinacao = new VacinacaoService();
+		PaisService pais = new PaisService();
 		
 		pessoa.setId(Integer.parseInt(resultado.getString("id")));
 		pessoa.setNome(resultado.getString("nome"));
 		pessoa.setDataNascimento(resultado.getDate("dataNascimento").toLocalDate()); 
 		pessoa.setSexo(resultado.getString("sexo"));
 		pessoa.setCpf(resultado.getString("cpf"));
-		if(resultado.getInt("id_tipo") == 1) {
+		if(resultado.getInt("idTipo") == 1) {
 			pessoa.setTipo(TipoDeReceptor.PESQUISADOR);
 		}
-		if(resultado.getInt("id_tipo") == 2) {
+		if(resultado.getInt("idTipo") == 2) {
 			pessoa.setTipo(TipoDeReceptor.VOLUNTARIO);
 		}
-		if(resultado.getInt("id_tipo") == 3) {
+		if(resultado.getInt("idTipo") == 3) {
 			pessoa.setTipo(TipoDeReceptor.PUBLICO_GERAL);
 		}
+		pessoa.setPais(pais.buscar(resultado.getInt("idPais")));
+		//pessoa.setVacinacoes(vacinacao.buscarVacinacoesPorPessoa(pessoa.getId()));
 	}
 	
 	public boolean verificarCpfExiste(Pessoa pessoa) {
