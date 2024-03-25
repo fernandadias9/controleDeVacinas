@@ -8,6 +8,7 @@ import model.repository.PessoaRepository;
 public class PessoaService {
 
 	private PessoaRepository pessoaRepository = new PessoaRepository();
+	VacinacaoService vacinacao = new VacinacaoService();
 	
 	public Pessoa cadastrar(Pessoa novaPessoa) throws ControleVacinasException {
 		
@@ -35,7 +36,9 @@ public class PessoaService {
 	}
 	
 	public Pessoa buscar(int id ) {
-		return pessoaRepository.buscar(id);
+		Pessoa pessoa = pessoaRepository.buscar(id);
+		pessoa.setVacinacoes(vacinacao.buscarVacinacoesPorPessoa(pessoa.getId()));
+		return pessoa;
 	}
 	
 	public boolean excluir(int id) {

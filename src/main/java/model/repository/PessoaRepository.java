@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import model.entity.Pessoa;
 import model.entity.enums.TipoDeReceptor;
 import service.PaisService;
-import service.VacinacaoService;
 
 public class PessoaRepository {
 
@@ -151,7 +150,6 @@ public class PessoaRepository {
 	
 	private void preencherParametrosParaListarOuBuscar(ResultSet resultado
 			, Pessoa pessoa) throws SQLException {
-//		VacinacaoService vacinacao = new VacinacaoService();
 		PaisService pais = new PaisService();
 		
 		pessoa.setId(Integer.parseInt(resultado.getString("id")));
@@ -169,7 +167,6 @@ public class PessoaRepository {
 			pessoa.setTipo(TipoDeReceptor.PUBLICO_GERAL);
 		}
 		pessoa.setPais(pais.buscar(resultado.getInt("idPais")));
-		//pessoa.setVacinacoes(vacinacao.buscarVacinacoesPorPessoa(pessoa.getId()));
 	}
 	
 	public boolean verificarCpfExiste(Pessoa pessoa) {
