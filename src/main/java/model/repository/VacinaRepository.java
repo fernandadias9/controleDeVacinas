@@ -10,8 +10,9 @@ import model.entity.Vacina;
 import model.entity.enums.Estagio;
 import service.PaisService;
 
-public class VacinaRepository {
+public class VacinaRepository implements BaseRepository<Vacina> {
 
+	@Override
 	public Vacina cadastrar(Vacina novaVacina) {
 		
 		String query = "INSERT INTO vacina (nome, idPaisOrigem, idPesquisador, idEstagio, dataInicio) VALUES (?, ?, ?, ?, ?)";
@@ -37,6 +38,7 @@ public class VacinaRepository {
 		return novaVacina;
 	}
 	
+	@Override
 	public Boolean atualizar(Vacina vacina) {
 		boolean resultado = false;
 		String query = "UPDATE vacina SET nome=?, idPaisOrigem=?, idPesquisador=?, idEstagio=?, dataInicio=? WHERE id=?";
@@ -57,6 +59,7 @@ public class VacinaRepository {
 		return resultado;
 	}
 	
+	@Override
 	public ArrayList<Vacina> listarTodas() {		
 		ArrayList<Vacina> listaVacinas = new ArrayList<>();
 		Connection conn = Banco.getConnection();
@@ -83,8 +86,9 @@ public class VacinaRepository {
 		return listaVacinas;
 	}
 	
+	@Override
 	public Vacina buscar(int id) {
-		Vacina vacina = new Vacina();
+		Vacina vacina = null;
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
@@ -106,6 +110,7 @@ public class VacinaRepository {
 		return vacina;
 	}
 	
+	@Override
 	public Boolean excluir(int id) {
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);

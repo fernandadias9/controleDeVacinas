@@ -10,8 +10,9 @@ import model.entity.Pessoa;
 import model.entity.enums.TipoDeReceptor;
 import service.PaisService;
 
-public class PessoaRepository {
+public class PessoaRepository implements BaseRepository<Pessoa> {
 
+	@Override
 	public Pessoa cadastrar(Pessoa novaPessoa) {
 		String query = "INSERT INTO pessoa (nome, dataNascimento, sexo, cpf, idTipo, idPais) VALUES (?, ?, ?, ?, ?, ?)";
 		Connection conn = Banco.getConnection();
@@ -35,6 +36,7 @@ public class PessoaRepository {
 		return novaPessoa;
 	}
 	
+	@Override
 	public Boolean atualizar(Pessoa pessoa) {
 		boolean retorno = false;
 		String query = "UPDATE pessoa SET nome=?, dataNascimento=?, sexo=?, cpf=?, id_tipo=? WHERE id=?";
@@ -55,7 +57,8 @@ public class PessoaRepository {
 		return retorno;
 	}
 	
-	public ArrayList<Pessoa> consultarTodas() {
+	@Override
+	public ArrayList<Pessoa> listarTodas() {
 		ArrayList<Pessoa> listaPessoas = new ArrayList<>();
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
@@ -82,8 +85,9 @@ public class PessoaRepository {
 		return listaPessoas;
 	}
 	
+	@Override
 	public Pessoa buscar(int id) {
-		Pessoa pessoa = new Pessoa();
+		Pessoa pessoa = null;
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		
@@ -108,7 +112,8 @@ public class PessoaRepository {
 		return pessoa;
 	}
 	
-	public boolean excluir(int id) {
+	@Override
+	public Boolean excluir(int id) {
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		boolean excluiu = false;

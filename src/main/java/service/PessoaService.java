@@ -32,7 +32,7 @@ public class PessoaService {
 	}
 	
 	public ArrayList<Pessoa> consultarTodas(){
-		return pessoaRepository.consultarTodas();		
+		return pessoaRepository.listarTodas();		
 	}
 	
 	public Pessoa buscar(int id ) {
@@ -60,6 +60,9 @@ public class PessoaService {
 		}
 		if(novaPessoa.getTipo() == null) {
 			throw new ControleVacinasException("Campo tipo não pode ficar vazio.");
+		}
+		if(novaPessoa.getPais() == null) {
+			throw new ControleVacinasException("Campo país não pode ficar vazio.");
 		}
 	}
 }
