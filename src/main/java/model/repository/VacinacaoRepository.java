@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import model.entity.Vacinacao;
 import service.VacinaService;
@@ -13,12 +14,14 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 
 	@Override
 	public Vacinacao cadastrar(Vacinacao novaVacinacao) {
+		VacinaRepository vacina = new VacinaRepository();
 		String query = "INSERT INTO vacinacao (idPessoa, data, avaliacao, idVacina) VALUES(?, ?, ?, ?)";
 		Connection conn = Banco.getConnection();
 		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
 		try {
 			preencherParametrosParaInsertOuUpdate(pstmt, novaVacinacao);
 			pstmt.execute();
+			vacina.atualizarMedia(novaVacinacao.getVacina().getId());
 			ResultSet resultado = pstmt.getGeneratedKeys();
 			
 			if(resultado.next()) {
@@ -36,6 +39,7 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 	
 	@Override
 	public Boolean atualizar(Vacinacao vacinacao) {
+		VacinaRepository vacina = new VacinaRepository();
 		boolean retorno = false;
 		String query = "UPDATE vacinacao SET idPessoa=?, avaliacao=?, idVacina=?, data=? WHERE id=?";
 		Connection conn = Banco.getConnection();
@@ -45,6 +49,7 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 			preencherParametrosParaInsertOuUpdate(pstmt, vacinacao);
 			pstmt.setObject(4,vacinacao.getData());
 			pstmt.setInt(5, vacinacao.getId());
+			vacina.atualizarMedia(vacinacao.getVacina().getId());
 			retorno = pstmt.executeUpdate() > 0;
 		} catch(SQLException erro) {
 			System.out.println("Erro ao atualizar vacinação.");
@@ -83,7 +88,7 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 	
 	@Override
 	public Vacinacao buscar(int id) {
-		Vacinacao vacinacao = null;
+		Vacinacao vacinacao = new Vacinacao();
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
@@ -148,10 +153,60 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 		return listaVacinacoes;
 	}
 	
+	public Boolean buscarVacinacoesPorVacina(int idVacina){
+		boolean vacinaAplicada = false;
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		String query = "SELECT * FROM vacinacao WHERE idVacina = " + idVacina;
+		
+		try {
+			ResultSet resultado = stmt.executeQuery(query);
+			
+			if(resultado.next()) {
+				vacinaAplicada = true;
+			}
+		} catch (SQLException erro) {
+			System.out.println("Não foi possível listar as vacinações.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return vacinaAplicada;
+	}
+	
+	public double calcularMediaAvaliacoesPorVacina(int idVacina) {
+		int quantidadeAplicacoes = 0;
+		int somaAvaliacoes = 0;		
+		double media = 0;
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		String query = "SELECT * FROM vacinacao WHERE idVacina = " + idVacina;
+		
+		try {
+			ResultSet resultado = stmt.executeQuery(query);
+			
+			while(resultado.next()) {
+				quantidadeAplicacoes++;
+				somaAvaliacoes += resultado.getInt("avaliacao");
+			}
+			media = ((double) somaAvaliacoes/quantidadeAplicacoes);
+		} catch (SQLException erro) {
+			System.out.println("Não foi possível executar o método calcularMediaAvaliacoesPorVacina.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		
+		return media;
+	}
+	
 	public void preencherParametrosParaInsertOuUpdate(PreparedStatement pstmt, Vacinacao novaVacinacao) throws SQLException {
-		pstmt.setInt(1,novaVacinacao.getIdPessoa());		
-		pstmt.setInt(2,novaVacinacao.getAvaliacao());
-		pstmt.setInt(3,novaVacinacao.getVacina().getId());
+		pstmt.setInt(1,novaVacinacao.getIdPessoa());
+		pstmt.setObject(2, LocalDate.now());
+		pstmt.setInt(3,novaVacinacao.getAvaliacao());
+		pstmt.setInt(4,novaVacinacao.getVacina().getId());
 	}
 	
 	public void preencherParametrosParaListarTodasOuBuscar(ResultSet resultado, Vacinacao vacinacao) throws SQLException {

@@ -52,7 +52,7 @@ public class VacinaController {
 	@DELETE
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/excluir/{ id }")
-	public Boolean excluir(@PathParam("id") int id) {
+	public Boolean excluir(@PathParam("id") int id) throws ControleVacinasException {
 		return vacinaService.excluir(id);
 	}
 }

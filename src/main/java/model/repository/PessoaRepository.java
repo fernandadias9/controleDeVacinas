@@ -87,7 +87,7 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 	
 	@Override
 	public Pessoa buscar(int id) {
-		Pessoa pessoa = null;
+		Pessoa pessoa = new Pessoa();
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		
@@ -155,7 +155,7 @@ public class PessoaRepository implements BaseRepository<Pessoa> {
 	
 	private void preencherParametrosParaListarOuBuscar(ResultSet resultado
 			, Pessoa pessoa) throws SQLException {
-		PaisService pais = new PaisService();
+		PaisService pais = new PaisService();		
 		
 		pessoa.setId(Integer.parseInt(resultado.getString("id")));
 		pessoa.setNome(resultado.getString("nome"));

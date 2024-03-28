@@ -37,11 +37,14 @@ public class PessoaService {
 	
 	public Pessoa buscar(int id ) {
 		Pessoa pessoa = pessoaRepository.buscar(id);
-		pessoa.setVacinacoes(vacinacao.buscarVacinacoesPorPessoa(pessoa.getId()));
+		pessoa.setVacinacoes(vacinacao.buscarVacinacoesPorPessoa(id));
 		return pessoa;
 	}
 	
-	public boolean excluir(int id) {
+	public boolean excluir(int id) throws ControleVacinasException {
+		if(!vacinacao.buscarVacinacoesPorPessoa(id).isEmpty()) {
+			throw new ControleVacinasException("Não é possível excluir pessoa com vacinações cadastradas.");
+		}
 		return pessoaRepository.excluir(id);
 	}
 	

@@ -59,6 +59,24 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 		return resultado;
 	}
 	
+	public void atualizarMedia(int id) {
+		VacinacaoRepository vacinacao = new VacinacaoRepository();
+		String query = "UPDATE vacina SET mediaDasAvaliacoes=? WHERE id= " + id;
+		Connection conn = Banco.getConnection();
+		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
+		
+		try {
+			pstmt.setDouble(1, vacinacao.calcularMediaAvaliacoesPorVacina(id));
+			pstmt.executeUpdate();
+		} catch(SQLException erro) {
+			System.out.println("Não foi possível atualizar média das avaliações da vacina.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closePreparedStatement(pstmt);
+			Banco.closeConnection(conn);
+		}
+	}
+	
 	@Override
 	public ArrayList<Vacina> listarTodas() {		
 		ArrayList<Vacina> listaVacinas = new ArrayList<>();
@@ -88,7 +106,7 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 	
 	@Override
 	public Vacina buscar(int id) {
-		Vacina vacina = null;
+		Vacina vacina = new Vacina();;
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
@@ -167,5 +185,6 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 			vacina.setEstagio(Estagio.APLICACAO);
 		}		
 		vacina.setDataInicio(resultado.getDate("dataInicio").toLocalDate());
+		vacina.setMediaDasAvaliacoes(resultado.getDouble("mediaDasAvaliacoes"));
 	}
 }
