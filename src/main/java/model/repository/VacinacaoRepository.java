@@ -15,11 +15,12 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 	@Override
 	public Vacinacao cadastrar(Vacinacao novaVacinacao) {
 		VacinaRepository vacina = new VacinaRepository();
-		String query = "INSERT INTO vacinacao (idPessoa, data, avaliacao, idVacina) VALUES(?, ?, ?, ?)";
+		String query = "INSERT INTO vacinacao (idPessoa, avaliacao, idVacina, data) VALUES(?, ?, ?, ?)";
 		Connection conn = Banco.getConnection();
 		PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
 		try {
 			preencherParametrosParaInsertOuUpdate(pstmt, novaVacinacao);
+			pstmt.setObject(4, LocalDate.now());
 			pstmt.execute();
 			vacina.atualizarMedia(novaVacinacao.getVacina().getId());
 			ResultSet resultado = pstmt.getGeneratedKeys();
@@ -49,8 +50,8 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 			preencherParametrosParaInsertOuUpdate(pstmt, vacinacao);
 			pstmt.setObject(4,vacinacao.getData());
 			pstmt.setInt(5, vacinacao.getId());
-			vacina.atualizarMedia(vacinacao.getVacina().getId());
 			retorno = pstmt.executeUpdate() > 0;
+			vacina.atualizarMedia(vacinacao.getVacina().getId());
 		} catch(SQLException erro) {
 			System.out.println("Erro ao atualizar vacinação.");
 			System.out.println("Erro: " + erro.getMessage());
@@ -204,9 +205,8 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 	
 	public void preencherParametrosParaInsertOuUpdate(PreparedStatement pstmt, Vacinacao novaVacinacao) throws SQLException {
 		pstmt.setInt(1,novaVacinacao.getIdPessoa());
-		pstmt.setObject(2, LocalDate.now());
-		pstmt.setInt(3,novaVacinacao.getAvaliacao());
-		pstmt.setInt(4,novaVacinacao.getVacina().getId());
+		pstmt.setInt(2,novaVacinacao.getAvaliacao());
+		pstmt.setInt(3,novaVacinacao.getVacina().getId());
 	}
 	
 	public void preencherParametrosParaListarTodasOuBuscar(ResultSet resultado, Vacinacao vacinacao) throws SQLException {
