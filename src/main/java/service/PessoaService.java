@@ -1,7 +1,8 @@
 package service;
 
 import java.util.ArrayList;
-import excepition.ControleVacinasException;
+
+import exception.ControleVacinasException;
 import model.entity.Pessoa;
 import model.repository.PessoaRepository;
 

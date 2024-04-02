@@ -1,6 +1,6 @@
 package service;
 
-import excepition.ControleVacinasException;
+import exception.ControleVacinasException;
 import model.entity.Pais;
 import model.repository.PaisRepository;
 

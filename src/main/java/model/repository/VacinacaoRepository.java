@@ -154,7 +154,7 @@ public class VacinacaoRepository implements BaseRepository<Vacinacao> {
 		return listaVacinacoes;
 	}
 	
-	public Boolean buscarVacinacoesPorVacina(int idVacina){
+	public Boolean verificarSeVacinaTemDoseAplicada(int idVacina){
 		boolean vacinaAplicada = false;
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);

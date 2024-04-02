@@ -2,7 +2,7 @@ package service;
 
 import java.util.ArrayList;
 
-import excepition.ControleVacinasException;
+import exception.ControleVacinasException;
 import model.entity.Vacinacao;
 import model.entity.enums.Estagio;
 import model.entity.enums.TipoDeReceptor;

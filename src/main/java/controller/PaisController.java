@@ -1,6 +1,6 @@
 package controller;
 
-import excepition.ControleVacinasException;
+import exception.ControleVacinasException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;

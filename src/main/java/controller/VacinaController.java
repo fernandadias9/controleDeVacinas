@@ -2,7 +2,7 @@ package controller;
 
 import java.util.ArrayList;
 
-import excepition.ControleVacinasException;
+import exception.ControleVacinasException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;

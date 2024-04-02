@@ -1,4 +1,4 @@
-package excepition;
+package exception;
 
 public class ControleVacinasException extends Exception {
 

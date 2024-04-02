@@ -2,7 +2,7 @@ package service;
 
 import java.util.ArrayList;
 
-import excepition.ControleVacinasException;
+import exception.ControleVacinasException;
 import model.entity.Vacina;
 import model.entity.enums.TipoDeReceptor;
 import model.repository.VacinaRepository;
@@ -36,7 +36,7 @@ public class VacinaService {
 	}
 	
 	public Boolean excluir(int id) throws ControleVacinasException {
-		if(vacinacao.buscarVacinacoesPorVacina(id)) {
+		if(vacinacao.verificarSeVacinaTemDoseAplicada(id)) {
 			throw new ControleVacinasException("Não é possível excluir vacina já apliacada.");
 		}
 		return vacinaRepository.excluir(id);
