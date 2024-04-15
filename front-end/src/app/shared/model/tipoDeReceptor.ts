@@ -1,0 +1,5 @@
+export enum TipoDeReceptor {
+  PESQUISADOR = "PESQUISADOR",
+  VOLUNTARIO = "VOLUNTARIO",
+  PUBLICO_GERAL = "PUBLICO_GERAL"
+}

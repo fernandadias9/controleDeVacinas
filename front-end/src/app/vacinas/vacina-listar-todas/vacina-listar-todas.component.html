@@ -1,0 +1,36 @@
+<div class="container">
+  <form>
+    <div class="col-md-12">
+        <div class="col-md-3">
+            <label for="nomePais" class="form-label">País:</label>
+            <input type="text" class="form-control" name="nomePais">
+        </div>
+        <button type="submit" class="btn btn-primary" >Pesquisar</button>
+    </div>
+  </form>
+</div>
+
+<br><br>
+
+<table class="table table-dark table-hover">
+  <thead>
+      <th>Nome</th>
+      <th>País de Origem</th>
+      <th>Pesquisador</th>
+      <th>Iniciada em:</th>
+      <th>Estágio</th>
+      <th>Avaliação</th>
+  </thead>
+  <tbody>
+      @for(vacina of vacinas; track vacina) {
+          <tr>
+              <td>{{ vacina.nome }}</td>
+              <td>{{ vacina.paisOrigem.nome }}</td>
+              <td>{{ vacina.pesquisadorResponsavel.nome }}</td>
+              <td>{{ vacina.dataInicio | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ vacina.estagio }}</td>
+              <td>{{vacina.mediaDasAvaliacoes}}</td>
+          </tr>
+      }
+  </tbody>
+</table>
