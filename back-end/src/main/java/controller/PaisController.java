@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.ArrayList;
+
 import exception.ControleVacinasException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -28,5 +30,12 @@ private PaisService paisService = new PaisService();
 	@Path("/buscar/{id}")
 	public Pais buscar(@PathParam("id") int id){
 		 return paisService.buscar(id);
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/listar")
+	public ArrayList<Pais> listarTodos(){
+		return paisService.listarTodos();
 	}
 }

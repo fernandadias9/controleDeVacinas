@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import exception.ControleVacinasException;
 import model.entity.Vacina;
 import model.entity.enums.TipoDeReceptor;
+import model.entity.filtros.VacinaFiltro;
 import model.repository.VacinaRepository;
 import model.repository.VacinacaoRepository;
 
@@ -29,6 +30,10 @@ public class VacinaService {
 	
 	public ArrayList<Vacina> listarTodas() {
 		return vacinaRepository.listarTodas();
+	}
+	
+	public ArrayList<Vacina> buscarComFiltro(VacinaFiltro filtro) {
+		return vacinaRepository.buscarComFiltro(filtro);
 	}
 	
 	public Vacina buscar(int id) {

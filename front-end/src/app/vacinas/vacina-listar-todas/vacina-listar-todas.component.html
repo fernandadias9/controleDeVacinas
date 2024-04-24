@@ -1,25 +1,113 @@
-<div class="container">
-  <form>
-    <div class="col-md-12">
-        <div class="col-md-3">
-            <label for="nomePais" class="form-label">País:</label>
-            <input type="text" class="form-control" name="nomePais">
-        </div>
-        <button type="submit" class="btn btn-primary" >Pesquisar</button>
+<!-- <div class="container">
+  <div class="card">
+    <div class="card-header bg-info">
+      <h5>Filtros</h5>
     </div>
-  </form>
+    <div class="card-body">
+      <form>
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-3">
+                <label for="nome" class="form-label">Nome:</label>
+                <input type="text" class="form-control" name="nome" [(ngModel)]="filtro.nome">
+            </div>
+
+            <div class="col-md-3">
+                <label for="nomePais" class="form-label">País:</label>
+                <input type="text" class="form-control" name="nomePais" [(ngModel)]="filtro.pais">
+            </div>
+
+          </div>
+        </div>
+
+        <button type="button" class="form-control btn btn-warning" (click)="limpar()"><i class="bi bi-trash"></i>Limpar</button>
+        <button type="submit" class="btn btn-primary" (click)="pesquisar()">Pesquisar</button>
+      </form>
+    </div>
+  </div>
+</div> -->
+
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header h4 .texto-ênfase-secundário">Filtros</div>
+        <div class="card-body">
+          <form>
+            <div class="row mb-3">
+              <div class="form-group col-md-4">
+                <label for="nome" class="form-label">Nome:</label>
+                <input type="text" class="form-control" name="nome" [(ngModel)]="filtro.nome">
+              </div>
+
+              <div class="form-group col-md-4">
+                <label for="paisOrigem" class="form-label">País:</label>
+                <select class="form-select" aria-label="Selecione o país" id="paisOrigem" name="paisOrigem" [(ngModel)]="filtro.pais">
+                  @for(pais of paises; track pais.id) {
+                    <option value="{{ pais.nome }}">{{ pais.nome }} ({{ pais.sigla }})</option>
+                  }
+                </select>
+              </div>
+
+              <div class="form-group col-md-4">
+                <label for="pesquisador">Pesquisador Responsável:</label>
+                <select class="form-control" id="pesquisador">
+                  <option value="">Selecione o pesquisador responsável</option>
+
+                </select>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="form-group col-md-6">
+                <label for="dataInicial">Data Inicial:</label>
+                <input type="date" class="form-control" id="dataInicial">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="dataFinal">Data Final:</label>
+                <input type="date" class="form-control" id="dataFinal">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="form-group col-md-4">
+                <label for="estagio">Estágio:</label>
+                <select class="form-control" id="estagio">
+                  <option value="">Selecione o estágio</option>
+
+                </select>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="avaliacaoMin">Avaliação Mínima:</label>
+                <input type="number" class="form-control" id="avaliacaoMin">
+              </div>
+              <div class="form-group col-md-4">
+                <label for="avaliacaoMax">Avaliação Máxima:</label>
+                <input type="number" class="form-control" id="avaliacaoMax">
+              </div>
+            </div>
+            <div class="form-group d-flex column-gap-2">
+              <button type="button" class="btn btn-warning btn-sm flex-grow-1" (click)="limpar()"><i class="bi bi-trash"></i>Limpar</button>
+              <button type="submit" class="btn btn-primary btn-sm flex-grow-1" (click)="pesquisar()">Pesquisar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <br><br>
 
 <table class="table table-dark table-hover">
   <thead>
+    <tr>
       <th>Nome</th>
       <th>País de Origem</th>
       <th>Pesquisador</th>
       <th>Iniciada em:</th>
       <th>Estágio</th>
       <th>Avaliação</th>
+      <th>Ações</th>
+    </tr>
   </thead>
   <tbody>
       @for(vacina of vacinas; track vacina) {
@@ -30,6 +118,12 @@
               <td>{{ vacina.dataInicio | date: 'dd/MM/yyyy' }}</td>
               <td>{{ vacina.estagio }}</td>
               <td>{{vacina.mediaDasAvaliacoes}}</td>
+              <td>
+                <div class="row-1 gap-0 column-gap-2">
+                  <button class="btn btn-primary">Editar</button>
+                  <button class="btn btn-secondary">Excluir</button>
+                </div>
+              </td>
           </tr>
       }
   </tbody>

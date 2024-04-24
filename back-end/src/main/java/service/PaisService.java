@@ -1,5 +1,7 @@
 package service;
 
+import java.util.ArrayList;
+
 import exception.ControleVacinasException;
 import model.entity.Pais;
 import model.repository.PaisRepository;
@@ -19,5 +21,9 @@ public class PaisService {
 	
 	public Pais buscar(int id ) {
 		return paisRepository.buscar(id);
+	}
+	
+	public ArrayList<Pais> listarTodos(){
+		return paisRepository.listarTodos();
 	}
 }

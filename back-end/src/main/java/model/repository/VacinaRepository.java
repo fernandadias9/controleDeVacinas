@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import model.entity.Vacina;
 import model.entity.enums.Estagio;
+import model.entity.filtros.VacinaFiltro;
 import service.PaisService;
 
 public class VacinaRepository implements BaseRepository<Vacina> {
@@ -126,6 +127,52 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 			Banco.closeConnection(conn);
 		}
 		return vacina;
+	}
+	
+	public ArrayList<Vacina> buscarComFiltro(VacinaFiltro filtro) {
+		ArrayList<Vacina> vacinas = new ArrayList<Vacina>();
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);		
+		ResultSet resultado = null;
+		String query = "SELECT v.* FROM vacina v inner join pais p on v.idPaisOrigem = p.id inner join pessoa pe on v.idPesquisador = pe.id ";
+		boolean primeiro = true;
+		
+		if(filtro.getNome() != null) {
+			if(primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += "UPPER(v.nome) LIKE UPPER('%" + filtro.getNome() + "%')";
+			primeiro = false;
+		}
+		
+		if(filtro.getPais() != null) {
+			if(primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += "UPPER(p.nome) LIKE UPPER('%" + filtro.getPais() + "%')";
+			primeiro = false;
+		}
+		
+		try {
+			resultado = stmt.executeQuery(query);
+			while(resultado.next()) {
+				Vacina vacina = new Vacina();
+				preencherParametrosParaBuscarOuListarTodas(resultado, vacina);
+				vacinas.add(vacina);
+			}
+		} catch(SQLException erro) {
+			System.out.println("Erro ao buscar vacinas");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}		
+		return vacinas;
 	}
 	
 	@Override

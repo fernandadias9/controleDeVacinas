@@ -13,6 +13,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import model.entity.Vacina;
+import model.entity.filtros.VacinaFiltro;
 import service.VacinaService;
 
 @Path("/vacina")
@@ -40,6 +41,14 @@ public class VacinaController {
 	@Path("/listartodas")
 	public ArrayList<Vacina> listarTodas() {
 		return vacinaService.listarTodas();
+	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/filtrar")
+	public ArrayList<Vacina> buscarComFiltro(VacinaFiltro filtro) {
+		return vacinaService.buscarComFiltro(filtro);
 	}
 	
 	@GET
