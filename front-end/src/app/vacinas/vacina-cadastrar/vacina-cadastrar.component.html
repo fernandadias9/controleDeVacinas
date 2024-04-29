@@ -1,53 +1,56 @@
+<pre>{{ vacina | json}}</pre>
 <div class="container">
-  <form>
-    <div class="card">
-      <div class="card-header">
-        <h3>Cadastro de vacinas</h3>
-      </div>
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header h4 .texto-ênfase-secundário">Cadastro de vacinas</div>
 
-      <div class="card-body">
-        <div class="mb-3">
-          <label for="nomeVacina" class="form-label">Nome:</label>
-          <input type="text" class="form-control" id="nomeVacina" name="nomeVacina" [(ngModel)]="vacina.nome">
-        </div>
+        <div class="card-body">
+          <form>
+            <div class="mb-3">
+              <label for="nomeVacina" class="form-label">Nome:</label>
+              <input type="text" class="form-control" id="nomeVacina" name="nomeVacina" [(ngModel)]="vacina.nome">
+            </div>
 
-        <div class="form-group col-md-4">
-          <label for="pais" class="form-label">País de origem:</label>
-          <select class="form-select" aria-label="Selecione o país" id="pais" name="pais" [(ngModel)]="vacina.paisOrigem">
-            @for(pais of paises; track pais.id) {
-              <option value="{{ pais.id }}">{{ pais.nome }} ({{ pais.sigla }})</option>
-            }
-          </select>
-        </div>
+            <div class="form-group col-md-4">
+              <label for="pais" class="form-label">País de origem:</label>
+              <select class="form-select" aria-label="Selecione o país" id="pais" name="pais" [(ngModel)]="vacina.paisOrigem" [compareWith]="compareById">
+                @for(pais of paises; track pais.id) {
+                  <option [ngValue]="pais">{{ pais.nome }} ({{ pais.sigla }})</option>
+                }
+              </select>
+            </div>
 
-        <div class="form-group col-md-4">
-          <label for="pesquisador" class="form-label">Pesquisador responsável:</label>
-          <select class="form-select" aria-label="Selecione o pesquisador responsável" id="pesquisador" name="pesquisador" [(ngModel)]="vacina.pesquisadorResponsavel">
-            @for(pesquisador of pessoas; track pesquisador.id) {
-              <option value="{{ pesquisador.id }}">{{ pesquisador.nome }}</option>
-            }
-          </select>
-        </div>
+            <div class="form-group col-md-4">
+              <label for="pesquisador" class="form-label">Pesquisador responsável:</label>
+              <select class="form-select" aria-label="Selecione o pesquisador responsável" id="pesquisador" name="pesquisador" [(ngModel)]="vacina.pesquisadorResponsavel" [compareWith]="compareById">
+                @for(pesquisador of pessoas; track pesquisador.id) {
+                  <option [ngValue]="pesquisador">{{ pesquisador.nome }}</option>
+                }
+              </select>
+            </div>
 
-        <div class="form-group col-md-4">
-          <label for="dataInicio" class="form-label">Data de início:</label>
-          <input type="date" class="form-control" id="dataInicio" name="dataInicio" [(ngModel)]="vacina.dataInicio">
-        </div>
+            <div class="form-group col-md-4">
+              <label for="dataInicio" class="form-label">Data de início:</label>
+              <input type="date" class="form-control" id="dataInicio" name="dataInicio" [(ngModel)]="vacina.dataInicio">
+            </div>
 
-        <div class="form-group col-md-4">
-          <label for="estagio" class="form-label">Estágio:</label>
-          <select class="form-select" aria-label="Selecione o estágio da vacina" id="estagio" name="estagio" [(ngModel)]="vacina.estagio">
-              <option value="{{ 1 }}">Inicial</option>
-              <option value="{{ 2 }}">Testes</option>
-              <option value="{{ 3 }}">Aplicação</option>
-          </select>
+            <div class="form-group col-md-4">
+              <label for="estagio" class="form-label">Estágio:</label>
+              <select class="form-select" aria-label="Selecione o estágio da vacina" id="estagio" name="estagio" [(ngModel)]="vacina.estagio">
+                  <option value="INICIAL">Inicial</option>
+                  <option value="TESTES">Testes</option>
+                  <option value="APLICACAO">Aplicação</option>
+              </select>
+            </div>
+
+            <div class="form-group d-flex column-gap-2">
+              <button type="button" class="btn btn-warning btn-sm flex-grow-1" (click)="voltar()" ><i class="bi bi-trash"></i>Voltar</button>
+              <button type="submit" class="btn btn-primary btn-sm flex-grow-1" (click)="salvar()">Salvar</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-
-    <div class="form-group d-flex column-gap-2">
-      <button type="button" class="btn btn-warning btn-sm flex-grow-1" ><i class="bi bi-trash"></i>Voltar</button>
-      <button type="submit" class="btn btn-primary btn-sm flex-grow-1" (click)="cadastrar()">Cadastrar</button>
-    </div>
-  </form>
+  </div>
 </div>

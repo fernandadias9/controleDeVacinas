@@ -24,4 +24,12 @@ export class VacinasService {
   cadastrar(vacina: Vacina) {
     return this.httpClient.post<Vacina>(this.API, vacina)
   }
+
+  buscar(id: number): Observable<Vacina> {
+    return this.httpClient.get<Vacina>(this.API + "/buscar/" + id);
+  }
+
+  atualizar(vacina: Vacina): Observable<boolean> {
+    return this.httpClient.put<boolean>(this.API + "/atualizar", vacina);
+  }
 }

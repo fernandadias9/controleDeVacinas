@@ -134,7 +134,8 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);		
 		ResultSet resultado = null;
-		String query = "SELECT v.* FROM vacina v inner join pais p on v.idPaisOrigem = p.id inner join pessoa pe on v.idPesquisador = pe.id ";
+		String query = "SELECT v.* FROM vacina v inner join pais p on v.idPaisOrigem = p.id "
+				+ "inner join pessoa pe on v.idPesquisador = pe.id inner join estagio e on v.idEstagio = e.id";
 		boolean primeiro = true;
 		
 		if(filtro.getNome() != null) {
@@ -154,6 +155,46 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 				query += " AND ";
 			}
 			query += "UPPER(p.nome) LIKE UPPER('%" + filtro.getPais() + "%')";
+			primeiro = false;
+		}
+		
+		if(filtro.getPesquisadorResponsavel() != null) {
+			if(primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += "UPPER(pe.nome) LIKE UPPER('%" + filtro.getPesquisadorResponsavel() + "%')";
+			primeiro = false;
+		}
+		
+		if(filtro.getDataInicial() != null && filtro.getDataFinal() != null) {
+			if(primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += "v.dataInicio BETWEEN '" + filtro.getDataInicial() + "' AND '" + filtro.getDataFinal() + "'";
+			primeiro = false;
+		}
+		
+		if(filtro.getEstagio() != null) {			
+			if(primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += "UPPER(e.estagio) LIKE UPPER('%" + filtro.getEstagio() + "%')";
+			primeiro = false;
+		}
+		
+		if(filtro.getAvaliacaoMinima() != null && filtro.getAvaliacaoMaxima() != null) {
+			if(primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += "v.mediaDasAvaliacoes BETWEEN " + filtro.getAvaliacaoMinima() + " AND " + filtro.getAvaliacaoMaxima();
 			primeiro = false;
 		}
 		
