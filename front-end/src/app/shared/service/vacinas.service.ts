@@ -32,4 +32,8 @@ export class VacinasService {
   atualizar(vacina: Vacina): Observable<boolean> {
     return this.httpClient.put<boolean>(this.API + "/atualizar", vacina);
   }
+
+  excluir(id: number): Observable<boolean> {
+    return this.httpClient.delete<boolean>(this.API + "/excluir/" + id);
+  }
 }

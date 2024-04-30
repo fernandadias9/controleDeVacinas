@@ -22,7 +22,7 @@ export class VacinaCadastrarComponent implements OnInit {
   public paises: Array<Pais> = new Array();
   public pessoas: Array<Pessoa> = new Array();
 
-  constructor(private vacinasService: VacinasService, private paisService: PaisService, private pessoaService: PessoaService,
+  constructor(private vacinaService: VacinasService, private paisService: PaisService, private pessoaService: PessoaService,
               private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
@@ -61,7 +61,7 @@ export class VacinaCadastrarComponent implements OnInit {
   }
 
   cadastrar() {
-    this.vacinasService.cadastrar(this.vacina).subscribe(
+    this.vacinaService.cadastrar(this.vacina).subscribe(
       resposta => {
         Swal.fire('Vacina cadastrada com sucesso!', '', 'success');
       },
@@ -72,7 +72,7 @@ export class VacinaCadastrarComponent implements OnInit {
   }
 
   atualizar(): void {
-    this.vacinasService.atualizar(this.vacina).subscribe(
+    this.vacinaService.atualizar(this.vacina).subscribe(
       (resposta) => {
         Swal.fire('Vacina atualizada com sucesso!', '', 'success');
       },
@@ -84,7 +84,7 @@ export class VacinaCadastrarComponent implements OnInit {
   }
 
   buscar(): void {
-    this.vacinasService.buscar(this.idVacina).subscribe(
+    this.vacinaService.buscar(this.idVacina).subscribe(
       (vacina) => {
         this.vacina = vacina;
       },

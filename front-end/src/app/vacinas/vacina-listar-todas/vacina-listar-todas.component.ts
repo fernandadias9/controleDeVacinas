@@ -8,6 +8,7 @@ import { Pais } from '../../shared/model/pais';
 import { TipoDeReceptor } from '../../shared/model/tipoDeReceptor';
 import { Pessoa } from '../../shared/model/pessoa';
 import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-vacina-listar-todas',
@@ -17,6 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class VacinaListarTodasComponent implements OnInit {
 
   public vacinas: Array<Vacina> = new Array();
+  public vacina: Vacina = new Vacina();
   public filtro: VacinaFiltro = new VacinaFiltro();
   public paises: Array<Pais> = new Array();
   public pessoas: Array<Pessoa> = new Array();
@@ -74,5 +76,29 @@ export class VacinaListarTodasComponent implements OnInit {
 
   editar(idVacina: number) {
     this.router.navigate(['/vacinas/cadastrar/', idVacina]);
+  }
+
+
+  excluir(vacina: Vacina) {
+    Swal.fire({
+      title: 'Deseja realmente excluir a vacina?',
+      text: 'Essa ação não poderá ser desfeita!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if(result.value) {
+        this.vacinaService.excluir(vacina.id).subscribe(
+          (resposta) => {
+            Swal.fire('Vacina excluída com sucesso!', '', 'success');
+          },
+          (erro) => {
+            Swal.fire('Erro ao excluir a vacina: ' + erro, 'error');
+            console.log(erro);
+          }
+        )
+      }
+    })
   }
 }
