@@ -36,4 +36,12 @@ export class VacinasService {
   excluir(id: number): Observable<boolean> {
     return this.httpClient.delete<boolean>(this.API + "/excluir/" + id);
   }
+
+  contarRegistro(filtro: VacinaFiltro): Observable<number> {
+    return this.httpClient.post<number>(this.API + "/contarRegistros", filtro)
+  }
+
+  contarPaginas(filtro: VacinaFiltro): Observable<number> {
+    return this.httpClient.post<number>(this.API + "/totalPaginas", filtro)
+  }
 }

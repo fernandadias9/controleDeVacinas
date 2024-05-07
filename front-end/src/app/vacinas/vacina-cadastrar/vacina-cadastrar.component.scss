@@ -1,0 +1,33 @@
+* {
+  --verdePrincipal: #0C6A6F;
+  --cinzaClaro: #DBE4E5;
+  --cinzaMedio: #98ACB4;
+  --cinzaEscuro: #546069;
+  --amarelo: #FBAB32;
+}
+
+.card-header {
+  background: var(--cinzaClaro);
+}
+
+.btnvoltar {
+  background: var(--cinzaClaro);
+  width: 100px;
+}
+
+.btnvoltar:hover {
+  background: var(--cinzaMedio);
+  scale: 1.05;
+  transition: .7s;
+}
+
+.btnsalvar {
+  background: var(--verdePrincipal);
+  width: 100px;
+}
+
+.btnsalvar:hover {
+  background: hsl(183, 80%, 34%);
+  scale: 1.05;
+  transition: .7s;
+}

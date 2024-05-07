@@ -1,0 +1,22 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  --verdePrincipal: #0C6A6F;
+  --cinzaClaro: #DBE4E5;
+  --cinzaMedio: #98ACB4
+  --cinzaEscuro: #546069;
+  --amarelo: #FBAB32;
+}
+
+.navbar {
+  margin-left: 10px;
+}
+
+.navbar-brand {
+  background-color: var(--verdePrincipal);
+}
+
+.dropdown-menu {
+  padding: 3px;
+}

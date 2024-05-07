@@ -7,6 +7,8 @@ export class VacinaFiltro {
   dataInicial: Date;
   dataFinal: Date;
   estagio: string;
-  avaliacaoMinima: Number;
-  avaliacaoMaxima: Number;
+  avaliacaoMinima: number;
+  avaliacaoMaxima: number;
+  pagina: number;
+  limite: number;
 }

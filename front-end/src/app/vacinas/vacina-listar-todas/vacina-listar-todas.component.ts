@@ -22,12 +22,24 @@ export class VacinaListarTodasComponent implements OnInit {
   public filtro: VacinaFiltro = new VacinaFiltro();
   public paises: Array<Pais> = new Array();
   public pessoas: Array<Pessoa> = new Array();
+  public qtdeRegistros: number;
+  public totalPaginas: number;
+  public registroInicial: number;
+  public registroFinal: number;
+  public pesquisouComFiltro: boolean;
+
 
   constructor(private vacinaService: VacinasService, private paisService: PaisService, private pessoaService: PessoaService,
               private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.consultarTodasVacinas();
+
+    this.filtro.pagina = 1;
+    this.filtro.limite = 5;
+    this.pesquisar();
+    this.contarPaginas();
+    this.contarRegistros();
+    this.mostrarRegistros();
 
     this.paisService.consultarTodos().subscribe(
         resultado => {
@@ -48,17 +60,6 @@ export class VacinaListarTodasComponent implements OnInit {
       );
   }
 
-  private consultarTodasVacinas() {
-    this.vacinaService.listarTodas().subscribe(
-      resultado => {
-        this.vacinas = resultado;
-      },
-      erro => {
-        console.error('Erro ao consultar vacinas', erro);
-      }
-    )
-  }
-
   public pesquisar() {
     this.vacinaService.listarComFiltro(this.filtro).subscribe(
       resultado => {
@@ -70,6 +71,53 @@ export class VacinaListarTodasComponent implements OnInit {
     )
   }
 
+  contarPaginas() {
+		this.vacinaService.contarPaginas(this.filtro).subscribe(
+      resultado => {
+        this.totalPaginas = resultado;
+      },
+      erro => {
+        Swal.fire('Erro ao contar páginas', erro.error.mensagem, 'error');
+      }
+    )
+	}
+
+  atualizarPaginacao() {
+    this.contarPaginas();
+    this.pesquisar();
+  }
+
+  /*private consultarTodasVacinas() {
+    this.vacinaService.listarTodas().subscribe(
+      resultado => {
+        this.vacinas = resultado;
+      },
+      erro => {
+        console.error('Erro ao consultar vacinas', erro);
+      }
+    )
+  }*/
+
+  contarRegistros() {
+		this.vacinaService.contarRegistro(this.filtro).subscribe(
+      resultado => {
+        this.qtdeRegistros = resultado;
+      },
+      erro => {
+        console.error('Erro ao contar vacinas: ', erro);
+      }
+    )
+	}
+
+  mostrarRegistros() {
+    this.registroInicial = 1 + ((this.filtro.pagina - 1) * this.filtro.limite);
+    if(this.filtro.pagina == this.totalPaginas) {
+      this.registroFinal = this.qtdeRegistros;
+    } else {
+      this.registroFinal = this.filtro.pagina * this.filtro.limite;
+    }
+  }
+
   public limpar() {
     this.filtro = new VacinaFiltro();
   }
@@ -77,7 +125,6 @@ export class VacinaListarTodasComponent implements OnInit {
   editar(idVacina: number) {
     this.router.navigate(['/vacinas/cadastrar/', idVacina]);
   }
-
 
   excluir(vacina: Vacina) {
     Swal.fire({
@@ -94,11 +141,21 @@ export class VacinaListarTodasComponent implements OnInit {
             Swal.fire('Vacina excluída com sucesso!', '', 'success');
           },
           (erro) => {
-            Swal.fire('Erro ao excluir a vacina: ' + erro, 'error');
+            Swal.fire(erro.error.mensagem, '', 'error');
             console.log(erro);
           }
         )
       }
     })
+  }
+
+  consultarPaginaAnterior() {
+    this.filtro.pagina--;
+    this.pesquisar();
+  }
+
+  consultarProximaPagina() {
+    this.filtro.pagina++;
+    this.pesquisar();
   }
 }
