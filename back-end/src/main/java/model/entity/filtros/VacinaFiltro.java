@@ -2,7 +2,7 @@ package model.entity.filtros;
 
 import java.time.LocalDate;
 
-public class VacinaFiltro {
+public class VacinaFiltro extends BaseFiltro {
 
 	private String pais;
 	private String nome;

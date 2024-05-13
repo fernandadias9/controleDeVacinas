@@ -15,13 +15,13 @@ public class VacinacaoService {
 	private final int NOTA_MAXIMA = 5;
 	
 	public Vacinacao cadastrar(Vacinacao novaVacinacao) throws ControleVacinasException{
-		PessoaRepository pessoa = new PessoaRepository();
+		PessoaRepository pessoaRepository = new PessoaRepository();
 		
 		if(novaVacinacao.getIdPessoa() == 0 || novaVacinacao.getVacina() == null || novaVacinacao.getVacina().getId() == 0) {
 			throw new ControleVacinasException("Informe o id da pessoa e o id da vacina aplicada.");
 		}
 		
-		validarReceptor(pessoa, novaVacinacao);
+		validarReceptor(pessoaRepository, novaVacinacao);
 		
 		if(novaVacinacao.getAvaliacao() == 0) {
 			novaVacinacao.setAvaliacao(NOTA_MAXIMA);

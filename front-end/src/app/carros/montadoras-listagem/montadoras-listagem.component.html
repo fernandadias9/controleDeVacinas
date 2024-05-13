@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-12">
+      <div class="card shadow">
+        <div class="card-header h4 .texto-ênfase-secundário">Filtros</div>
+
+        <div class="card-body">
+          <form>
+            <div class="row mb-3">
+              <div class="form-group col-md-4">
+                <label for="montadora" class="form-label">Marca:</label>
+                <select class="form-select border border-secondary-subtle border-1" aria-label="Selecione a marca" id="montadora" name="montadora" [(ngModel)]="montadora.id">
+                  @for(montadora of montadoras; track montadora.id) {
+                    <option value="{{ montadora.id }}">{{ montadora.nome }} ({{ montadora.paisFundacao }})</option>
+                  }
+                </select>
+              </div>
+
+              <div class="form-group d-flex justify-content-start column-gap-2 col-md-4">
+                <button type="submit" class="btn btn-pesquisar btn-sm" (click)="consultarEstoque()">Consultar estoque</button>
+              </div>
+              <div>
+                <h3>Estoque {{ montadora.nome }}:</h3>
+                <p>{{ estoque }}</p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

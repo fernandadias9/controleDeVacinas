@@ -136,66 +136,11 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 		ResultSet resultado = null;
 		String query = "SELECT v.* FROM vacina v inner join pais p on v.idPaisOrigem = p.id "
 				+ "inner join pessoa pe on v.idPesquisador = pe.id inner join estagio e on v.idEstagio = e.id";
-		boolean primeiro = true;
 		
-		if(filtro.getNome() != null) {
-			if(primeiro) {
-				query += " WHERE ";
-			} else {
-				query += " AND ";
-			}
-			query += "UPPER(v.nome) LIKE UPPER('%" + filtro.getNome() + "%')";
-			primeiro = false;
-		}
+		query += preencherFiltros(filtro);
 		
-		if(filtro.getPais() != null) {
-			if(primeiro) {
-				query += " WHERE ";
-			} else {
-				query += " AND ";
-			}
-			query += "UPPER(p.nome) LIKE UPPER('%" + filtro.getPais() + "%')";
-			primeiro = false;
-		}
-		
-		if(filtro.getPesquisadorResponsavel() != null) {
-			if(primeiro) {
-				query += " WHERE ";
-			} else {
-				query += " AND ";
-			}
-			query += "UPPER(pe.nome) LIKE UPPER('%" + filtro.getPesquisadorResponsavel() + "%')";
-			primeiro = false;
-		}
-		
-		if(filtro.getDataInicial() != null && filtro.getDataFinal() != null) {
-			if(primeiro) {
-				query += " WHERE ";
-			} else {
-				query += " AND ";
-			}
-			query += "v.dataInicio BETWEEN '" + filtro.getDataInicial() + "' AND '" + filtro.getDataFinal() + "'";
-			primeiro = false;
-		}
-		
-		if(filtro.getEstagio() != null) {			
-			if(primeiro) {
-				query += " WHERE ";
-			} else {
-				query += " AND ";
-			}
-			query += "UPPER(e.estagio) LIKE UPPER('%" + filtro.getEstagio() + "%')";
-			primeiro = false;
-		}
-		
-		if(filtro.getAvaliacaoMinima() != null && filtro.getAvaliacaoMaxima() != null) {
-			if(primeiro) {
-				query += " WHERE ";
-			} else {
-				query += " AND ";
-			}
-			query += "v.mediaDasAvaliacoes BETWEEN " + filtro.getAvaliacaoMinima() + " AND " + filtro.getAvaliacaoMaxima();
-			primeiro = false;
+		if(filtro.temPaginacao()) {
+			query += " LIMIT " + filtro.getLimite() + " OFFSET " + filtro.getOffset();
 		}
 		
 		try {
@@ -274,5 +219,109 @@ public class VacinaRepository implements BaseRepository<Vacina> {
 		}		
 		vacina.setDataInicio(resultado.getDate("dataInicio").toLocalDate());
 		vacina.setMediaDasAvaliacoes(resultado.getDouble("mediaDasAvaliacoes"));
+	}
+	
+	public String preencherFiltros(VacinaFiltro filtro) {
+		String query = " ";
+		
+		boolean primeiro = true;
+		
+		if(filtro.getNome() != null) {
+			if(primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += "UPPER(v.nome) LIKE UPPER('%" + filtro.getNome() + "%')";
+			primeiro = false;
+		}
+		
+		if(filtro.getPais() != null) {
+			if(primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += "UPPER(p.nome) LIKE UPPER('%" + filtro.getPais() + "%')";
+			primeiro = false;
+		}
+		
+		if(filtro.getPesquisadorResponsavel() != null) {
+			if(primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += "UPPER(pe.nome) LIKE UPPER('%" + filtro.getPesquisadorResponsavel() + "%')";
+			primeiro = false;
+		}
+		
+		if(filtro.getDataInicial() != null && filtro.getDataFinal() != null) {
+			if(primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += "v.dataInicio BETWEEN '" + filtro.getDataInicial() + "' AND '" + filtro.getDataFinal() + "'";
+			primeiro = false;
+		}
+		
+		if(filtro.getEstagio() != null) {			
+			if(primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += "UPPER(e.estagio) LIKE UPPER('%" + filtro.getEstagio() + "%')";
+			primeiro = false;
+		}
+		
+		if(filtro.getAvaliacaoMinima() != null && filtro.getAvaliacaoMaxima() != null) {
+			if(primeiro) {
+				query += " WHERE ";
+			} else {
+				query += " AND ";
+			}
+			query += "v.mediaDasAvaliacoes BETWEEN " + filtro.getAvaliacaoMinima() + " AND " + filtro.getAvaliacaoMaxima();
+			primeiro = false;
+		}
+		
+		return query;
+	}
+	
+	public int contarRegistros(VacinaFiltro filtro) {
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);		
+		int qtdeRegistros = 0;
+		String query = "SELECT COUNT(v.id) FROM vacina v inner join pais p on v.idPaisOrigem = p.id "
+				+ "inner join pessoa pe on v.idPesquisador = pe.id inner join estagio e on v.idEstagio = e.id";
+		
+		query += preencherFiltros(filtro);
+		
+		try {
+			ResultSet resultado = stmt.executeQuery(query);
+			if(resultado.next()) {
+				qtdeRegistros = resultado.getInt(1);
+			}
+		} catch(SQLException erro) {
+			System.out.println("Erro ao buscar vacinas");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return qtdeRegistros;
+	}
+	
+	public int totalPaginas(VacinaFiltro filtro) {
+		int limite = filtro.getLimite();
+		int totalRegistros = contarRegistros(filtro);
+		int qtdPaginas = totalRegistros / limite;
+		int resto = totalRegistros % limite;
+		
+		if(resto > 0) {
+			qtdPaginas++;
+		}
+		return qtdPaginas;
 	}
 }

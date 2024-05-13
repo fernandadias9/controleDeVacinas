@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-12">
+      <div class="card shadow">
+        <div class="card-header h4 .texto-ênfase-secundário">{{idVacinacao ? "Editar" : "Lançar" }} vacinação</div>
+
+        <div class="card-body">
+          <form>
+            <div class="row mb-3">
+              <div class="form-group col-md-4">
+                <label for="paciente" class="form-label">Paciente:</label>
+                <select class="form-select border border-secondary-subtle border-1" aria-label="Selecione o paciente" id="paciente" name="paciente" [(ngModel)]="vacinacao.idPessoa" [compareWith]="compareById">
+                  @for(paciente of pessoas; track paciente.id) {
+                    <option [ngValue]="paciente.id">{{ paciente.nome }}</option>
+                  }
+                </select>
+              </div>
+
+            </div>
+
+            <div class="row mb-3">
+              <div class="form-group col-md-4">
+                <label for="vacina" class="form-label">Vacina:</label>
+                <select class="form-select border border-secondary-subtle border-1" aria-label="Selecione a vacina" id="vacina" name="vacina" [(ngModel)]="vacinacao.vacina" [compareWith]="compareById">
+                  @for(vacina of vacinas; track vacina.id) {
+                    <option [ngValue]="vacina">{{ vacina.nome }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="form-group col-md-4">
+                <label for="dataInicio" class="form-label">Data da aplicação:</label>
+                <input type="date" class="form-control border border-secondary-subtle border-1" id="dataInicio" name="dataInicio" [(ngModel)]="vacinacao.data">
+              </div>
+
+              <div class="form-group col-md-4">
+                <label for="avaliacao" class="form-label">Avaliação:</label>
+                <input type="number" class="form-control" name="avaliacao" min="1" max="5" [(ngModel)]="vacinacao.avaliacao">
+              </div>
+            </div>
+
+            <div class="form-group d-flex justify-content-start column-gap-2">
+              <button type="button" class="btn btnvoltar" (click)="voltar()" >Voltar</button>
+              <button type="submit" class="btn btnsalvar text-white" (click)="cadastrar()">Salvar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

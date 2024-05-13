@@ -42,8 +42,16 @@ public class VacinaService {
 	
 	public Boolean excluir(int id) throws ControleVacinasException {
 		if(vacinacao.verificarSeVacinaTemDoseAplicada(id)) {
-			throw new ControleVacinasException("Não é possível excluir vacina já apliacada.");
+			throw new ControleVacinasException("Não é possível excluir vacina já aplicada.");
 		}
 		return vacinaRepository.excluir(id);
+	}
+	
+	public int contarRegistros(VacinaFiltro filtro) {
+		return vacinaRepository.contarRegistros(filtro);
+	}
+	
+	public int totalPaginas(VacinaFiltro filtro) {
+		return vacinaRepository.totalPaginas(filtro);
 	}
 }

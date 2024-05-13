@@ -1,19 +1,20 @@
 <div class="container">
   <div class="row justify-content-center mt-5">
     <div class="col-md-12">
-      <div class="card">
+      <div class="card shadow">
         <div class="card-header h4 .texto-ênfase-secundário">Filtros</div>
+
         <div class="card-body">
           <form>
             <div class="row mb-3">
               <div class="form-group col-md-4">
                 <label for="nome" class="form-label">Nome:</label>
-                <input type="text" class="form-control" name="nome" [(ngModel)]="filtro.nome">
+                <input type="text" class="form-control border border-secondary-subtle border-1" name="nome" [(ngModel)]="filtro.nome">
               </div>
 
               <div class="form-group col-md-4">
                 <label for="paisOrigem" class="form-label">País:</label>
-                <select class="form-select" aria-label="Selecione o país" id="paisOrigem" name="paisOrigem" [(ngModel)]="filtro.pais">
+                <select class="form-select border border-secondary-subtle border-1" aria-label="Selecione o país" id="paisOrigem" name="paisOrigem" [(ngModel)]="filtro.pais">
                   @for(pais of paises; track pais.id) {
                     <option value="{{ pais.nome }}">{{ pais.nome }} ({{ pais.sigla }})</option>
                   }
@@ -22,7 +23,7 @@
 
               <div class="form-group col-md-4">
                 <label for="pesquisador" class="form-label">Pesquisador responsável:</label>
-                <select class="form-select" aria-label="Selecione o pesquisador responsável" id="pesquisador" name="pesquisador" [(ngModel)]="filtro.pesquisadorResponsavel">
+                <select class="form-select border border-secondary-subtle border-1" aria-label="Selecione o pesquisador responsável" id="pesquisador" name="pesquisador" [(ngModel)]="filtro.pesquisadorResponsavel">
                   @for(pesquisador of pessoas; track pesquisador.id) {
                     <option value="{{ pesquisador.nome }}">{{ pesquisador.nome }}</option>
                   }
@@ -30,39 +31,41 @@
               </div>
 
               <div class="row mb-3">
-                <div class="form-group col-md-6">
-                  <label for="dataInicial">Data Inicial:</label>
-                  <input type="date" class="form-control" id="dataInicial" name="dataInicial" [(ngModel)]="filtro.dataInicial">
-                </div>
-
-                <div class="form-group col-md-6">
-                  <label for="dataFinal">Data Final:</label>
-                  <input type="date" class="form-control" id="dataFinal" name="dataFinal" [(ngModel)]="filtro.dataFinal">
-                </div>
-              </div>
-
-              <div class="row mb-3">
                 <div class="form-group col-md-4">
                   <label for="estagio">Estágio:</label>
-                  <select class="form-select" aria-label="Selecione o estágio da vacina" id="estagio" name="estagio" [(ngModel)]="filtro.estagio">
+                  <select class="form-select border border-secondary-subtle border-1" aria-label="Selecione o estágio da vacina" id="estagio" name="estagio" [(ngModel)]="filtro.estagio">
                     <option value="INICIAL">Inicial</option>
                     <option value="TESTES">Testes</option>
                     <option value="APLICACAO">Aplicação</option>
                 </select>
-                </div>
+              </div>
 
-                <div class="form-group col-md-4">
-                  <label for="avaliacaoMin">Avaliação Mínima:</label>
-                  <input type="number" class="form-control" id="avaliacaoMin" name="avaliacaoMin" [(ngModel)]="filtro.avaliacaoMinima">
-                </div>
-                <div class="form-group col-md-4">
-                  <label for="avaliacaoMax">Avaliação Máxima:</label>
-                  <input type="number" class="form-control" id="avaliacaoMax" name="avaliacaoMax" [(ngModel)]="filtro.avaliacaoMaxima">
-                </div>
+              <div class="form-group col-md-4">
+                <label for="avaliacaoMin">Avaliação Mínima:</label>
+                <input type="number" class="form-control border border-secondary-subtle border-1" id="avaliacaoMin" name="avaliacaoMin" [(ngModel)]="filtro.avaliacaoMinima">
+              </div>
+
+              <div class="form-group col-md-4">
+                <label for="avaliacaoMax">Avaliação Máxima:</label>
+                <input type="number" class="form-control border border-secondary-subtle border-1" id="avaliacaoMax" name="avaliacaoMax" [(ngModel)]="filtro.avaliacaoMaxima">
+              </div>
             </div>
-            <div class="form-group d-flex column-gap-2">
-              <button type="button" class="btn btn-warning btn-sm flex-grow-1" (click)="limpar()"><i class="bi bi-trash"></i>Limpar</button>
-              <button type="submit" class="btn btn-primary btn-sm flex-grow-1" (click)="pesquisar()">Pesquisar</button>
+
+            <div class="row mb-3 d-flex">
+              <div class="form-group col-md-4">
+                <label for="dataInicial">Data Inicial:</label>
+                <input type="date" class="form-control border border-secondary-subtle border-1" id="dataInicial" name="dataInicial" [(ngModel)]="filtro.dataInicial">
+              </div>
+
+              <div class="form-group col-md-4">
+                <label for="dataFinal">Data Final:</label>
+                <input type="date" class="form-control border border-secondary-subtle border-1" id="dataFinal" name="dataFinal" [(ngModel)]="filtro.dataFinal">
+              </div>
+
+              <div class="form-group d-flex justify-content-start column-gap-2 col-md-4">
+                <button type="button" class="btn btn-limpar btn-sm" (click)="limpar()">Limpar</button>
+                <button type="submit" class="btn btn-pesquisar text-white btn-sm" (click)="pesquisar()">Pesquisar</button>
+              </div>
             </div>
             </div>
           </form>
@@ -74,37 +77,37 @@
 
 <br><br>
 
-<table class="table table-dark table-hover">
-  <thead>
-    <tr>
-      <th>Nome</th>
-      <th>País de Origem</th>
-      <th>Pesquisador</th>
-      <th>Iniciada em:</th>
-      <th>Estágio</th>
-      <th>Avaliação</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-      @for(vacina of vacinas; track vacina) {
-          <tr>
-              <td>{{ vacina.nome }}</td>
-              <td>{{ vacina.paisOrigem.nome }}</td>
-              <td>{{ vacina.pesquisadorResponsavel.nome }}</td>
-              <td>{{ vacina.dataInicio | date: 'dd/MM/yyyy' }}</td>
-              <td>{{ vacina.estagio }}</td>
-              <td>{{vacina.mediaDasAvaliacoes}}</td>
-              <td>
-                <div class="row-1 gap-0 column-gap-2">
-                  <button class="btn btn-primary" (click)="editar(vacina.id)">Editar</button>
-                  <button class="btn btn-secondary" (click)="excluir(vacina)">Excluir</button>
-                </div>
-              </td>
-          </tr>
-      }
-  </tbody>
-</table>
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>País de Origem</th>
+        <th>Pesquisador</th>
+        <th>Iniciada em:</th>
+        <th>Estágio</th>
+        <th>Avaliação</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+        @for(vacina of vacinas; track vacina) {
+            <tr>
+                <td>{{ vacina.nome }}</td>
+                <td>{{ vacina.paisOrigem.nome }}</td>
+                <td>{{ vacina.pesquisadorResponsavel.nome }}</td>
+                <td>{{ vacina.dataInicio | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ vacina.estagio }}</td>
+                <td>{{vacina.mediaDasAvaliacoes}}</td>
+                <td>
+                  <div class="row-1 d-flex justify-content-start column-gap-2">
+                    <button class="btn btn-editar text-white" (click)="editar(vacina.id)">Editar</button>
+                    <button class="btn btn-excluir" (click)="excluir(vacina)">Excluir</button>
+                  </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+  </table>
 
 <div class="paginacao">
   <label for="qtdeItens">Itens por página</label>
@@ -113,7 +116,7 @@
     <option value="10">10</option>
     <option value="20">20</option>
   </select>
-  <button class="btn-anterior" *ngIf="filtro.pagina > 1" (click)="consultarPaginaAnterior()"><img src="../../../assets/chevron-left.svg" alt="anterior"></button>
+  <button class="btn-anterior" *ngIf="filtro.pagina > 1" (click)="consultarPaginaAnterior()"><img class="img-anterior" src="../../../assets/previous-svgrepo-com.svg" alt="anterior"></button>
   <span>{{ registroInicial }} - {{ registroFinal }} de {{ qtdeRegistros }}</span>
-  <button class="btn-proximo" *ngIf="filtro.pagina !== totalPaginas" (click)="consultarProximaPagina()"><img src="../../../assets/chevron-right.svg" alt="proximo"></button>
+  <button class="btn-proximo" *ngIf="filtro.pagina !== totalPaginas" (click)="consultarProximaPagina()"><img class="img-proximo" src="../../../assets/next-svgrepo-com.svg" alt="proximo"></button>
 </div>

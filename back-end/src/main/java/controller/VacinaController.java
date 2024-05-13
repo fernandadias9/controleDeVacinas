@@ -6,7 +6,6 @@ import exception.ControleVacinasException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.OPTIONS;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -64,5 +63,19 @@ public class VacinaController {
 	@Path("/excluir/{ id }")
 	public Boolean excluir(@PathParam("id") int id) throws ControleVacinasException {
 		return vacinaService.excluir(id);
+	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/contarRegistros")
+	public int contarRegistros(VacinaFiltro filtro) {
+		return vacinaService.contarRegistros(filtro);
+	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/totalPaginas")
+	public int totalPaginas(VacinaFiltro filtro) {
+		return vacinaService.totalPaginas(filtro);
 	}
 }

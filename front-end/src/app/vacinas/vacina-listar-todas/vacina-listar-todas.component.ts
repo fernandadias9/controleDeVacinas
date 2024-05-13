@@ -151,11 +151,15 @@ export class VacinaListarTodasComponent implements OnInit {
 
   consultarPaginaAnterior() {
     this.filtro.pagina--;
+    this.contarRegistros();
+    this.mostrarRegistros();
     this.pesquisar();
   }
 
   consultarProximaPagina() {
     this.filtro.pagina++;
+    this.contarRegistros();
+    this.mostrarRegistros();
     this.pesquisar();
   }
 }
